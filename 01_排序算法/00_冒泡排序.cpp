@@ -4,11 +4,11 @@
  * @Author: machun Michael
  * @Date: 2021-07-31 14:16:43
  * @LastEditors: machun Michael
- * @LastEditTime: 2021-07-31 17:16:28
+ * @LastEditTime: 2021-07-31 22:54:28
  */
 
 /**
- * 原理：按照升序排列
+ * 原理
  * 1. 假设有n个元素，比较相邻的两个元素，如第一个和第二个比较，如果比第二个大，则交换位置；第二个和第三个比较，如果比第三个大，则交换位置；
  *    以此类推，经过第一轮比较后，最大的排到最后一个位置
  * 2. 第二轮，按照前面的方式，比较除最后一个元素外的n-1个元素，可以将第二大的数排到倒数第二个位置
@@ -28,7 +28,7 @@ int bubble_sort(int *pArray, int len)
     int i = 0;
     int j = 0;
     int temp = 0;
-    bool bExchange = false;  // 是否交换过位置的标志
+    bool bExchange = false;  // 是否交换过位置的标志，可以提高效率
 
     for (i = 0; i < len - 1; i++)
     {
