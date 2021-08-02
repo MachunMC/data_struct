@@ -4,7 +4,7 @@
  * @Author: machun Michael
  * @Date: 2021-08-01 20:43:57
  * @LastEditors: machun Michael
- * @LastEditTime: 2021-08-01 22:07:05
+ * @LastEditTime: 2021-08-02 14:17:24
  */
 
 /**
@@ -19,12 +19,6 @@
 
 #define ARRAY_LEN 10
 
-/**
- * @description: 遍历数组
- * @param {int} *pArray，数组指针
- * @param {int} len，数组长度
- * @return: 成功返回0，失败返回-1
- */
 int traverse_array(int *pArray, int len)
 {
     for (int i = 0; i < ARRAY_LEN; i++)
@@ -43,7 +37,7 @@ int traverse_array(int *pArray, int len)
  * @param {int} InsertPos，要插入到数组的哪个位置
  * @return: 成功返回0，失败返回-1
  */
-int insert_array(int *pArray, int indexToInsert, int InsertPos)
+int insert_into_array(int *pArray, int indexToInsert, int InsertPos)
 {
     int temp = pArray[indexToInsert];
 
@@ -59,37 +53,26 @@ int insert_array(int *pArray, int indexToInsert, int InsertPos)
 int insert_sort(int *pArray, int len)
 {
     // 固定第一个数，从第二个数开始和前面的数进行比较
-    // 示例：1, 5, 4, 6, 8, 2, 9, 3, 4, 10
     for (int i = 1; i < len; i++)
     {
+        bool bMove = false;  // 选中的数，是否需要移动位置
+        int insertPos = 0;   // 要插入的位置
+    
         // 从后往前，分别进行比较
         for (int j = i - 1; j >= 0; j--)
         {
-            // 选中的数比前面的大，就进行插入或者进行下一轮比较
-            if (pArray[i] > pArray[j])
+            // 只要前面有比它大的，就要挪动位置，记录下要插入的位置
+            if (pArray[i] < pArray[j])
             {
-                // 选中的数刚好比前一个数大，本次就不用再进行比较了
-                if (j == i -1)
-                {
-                    break;
-                }
-                else // 插入到后面一个位置，后面的数往后挪一个位置
-                {
-                    insert_array(pArray, i, j+1);
-                }
-            }
-            else
-            {
-                // 如果选中的数是最小的，前面的数都比它大，就需要将它插入到第0个位置
-                if (j == 0)
-                {
-                    insert_array(pArray, i, 0);
-                }
+                bMove = true;
+                insertPos = j;
             }
         }
 
-        printf("第%d次比较后的结果，选中的数是Arr[%d]\n", i, i);
-        traverse_array(pArray, len);
+        if (true == bMove)
+        {
+            insert_into_array(pArray, i, insertPos);
+        }
     }
 
     return 0;
@@ -97,15 +80,15 @@ int insert_sort(int *pArray, int len)
 
 int main(void)
 {
-    int array[ARRAY_LEN] = {1, 5, 4, 6, 8, 2, 9, 3, 4, 10};
+    int array[ARRAY_LEN] = {1, 5, 4, 6, 8, 2, 11, 12, 13};
 
     printf("排序前的数组：");
     traverse_array(array, ARRAY_LEN);
     
     insert_sort(array, ARRAY_LEN);
 
-    // printf("排序后的数组：");
-    // traverse_array(array, ARRAY_LEN);    
+    printf("排序后的数组：");
+    traverse_array(array, ARRAY_LEN);
 
     return 0;
 }
