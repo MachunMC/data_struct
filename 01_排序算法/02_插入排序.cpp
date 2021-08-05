@@ -4,7 +4,7 @@
  * @Author: machun Michael
  * @Date: 2021-08-01 20:43:57
  * @LastEditors: machun Michael
- * @LastEditTime: 2021-08-02 14:17:24
+ * @LastEditTime: 2021-08-04 13:52:04
  */
 
 /**
@@ -21,7 +21,7 @@
 
 int traverse_array(int *pArray, int len)
 {
-    for (int i = 0; i < ARRAY_LEN; i++)
+    for (int i = 0; i < len; i++)
     {
         printf("%d ", pArray[i]);
     }

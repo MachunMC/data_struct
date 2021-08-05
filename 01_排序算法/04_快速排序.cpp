@@ -4,7 +4,7 @@
  * @Author: machun Michael
  * @Date: 2021-08-02 15:26:47
  * @LastEditors: machun Michael
- * @LastEditTime: 2021-08-03 15:13:26
+ * @LastEditTime: 2021-08-05 16:03:29
  */
 
 /**
@@ -16,12 +16,30 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-#define ARRAY_LEN 10
+#define ARRAY_LEN 10000
+
+/**
+ * @description: 随机生成一系列0 ~ 10000以内的整数
+ * @param {int} *pArray，数组指针
+ * @param {int} len，数组长度
+ * @return: 成功返回0，失败返回-1
+ */
+int create_int_array(int *pArray, int len)
+{
+    srand((unsigned int)time(NULL));  // 播种，不能放到for循环里，否则每次的种子都是相同的，rand生成的数也是相同的
+    for (int i = 0; i < len; i++)
+    {
+        pArray[i] = rand() % 100; // 生成随机数
+    }
+    
+    return 0;
+}
 
 int traverse_array(int *pArray, int len)
 {
-    for (int i = 0; i < ARRAY_LEN; i++)
+    for (int i = 0; i < len; i++)
     {
         printf("%d ", pArray[i]);
     }
@@ -30,66 +48,75 @@ int traverse_array(int *pArray, int len)
     return 0;
 }
 
-int quick_sort(int *pArray, int len)
+/**
+ * @description: 快速排序
+ * @param {int} *pArray，数组指针
+ * @param {int} start_index，区间起始索引
+ * @param {int} end_index，区间结束索引
+ * @return: 成功返回0，失败返回-1
+ */
+int quick_sort(int *pArray, int start_index, int end_index)
 {
-    int pivot = pArray[0];
-    int left_index = 0;           // 指向第1个元素的下标，下标向右移动
-    int right_index = len - 1;    // 指向最后一个元素的下标，下标向左移动
-    int temp = 0;
-    bool bleftMove = false;       // left指向的元素是否挪动位置
-    bool brightMode = false;      // right指向的元素是否挪动位置
+    int pivot = pArray[start_index]; // 选择第一个数作为基准
+    int left_index = start_index;    // 指向第一个元素的下标
+    int right_index = end_index;     // 指向最后一个元素的下标
 
     while (left_index != right_index)
     {
-        // 如果right指向的元素小于pivot，则该元素放到left指向的元素位置
-        if (pArray[right_index] < pivot)
+        // 如果right指向的元素小于pivot，则该元素放到左边（left指向的元素位置）
+        while (right_index > left_index && pArray[right_index] >= pivot)
         {
-            temp = pArray[right_index];
-            pArray[right_index] = pArray[left_index];
-            pArray[left_index] = temp;
-            brightMode = true;
+            right_index--;
         }
-
-        // 如果left指向的元素大于pivot，则该元素放到right指向的元素位置
-        if (pArray[left_index] >= pivot)
+                
+        if (left_index == right_index)
         {
-            temp = pArray[left_index];
-            pArray[left_index] = pArray[right_index];
-            pArray[right_index] = temp;
-            bleftMove = true;
+            break;
         }
+        pArray[left_index] = pArray[right_index];
 
-        if (true == bleftMove)
+        // 如果left指向的元素大于等于pivot，则该元素放到右边（right指向的元素位置）
+        while (right_index > left_index && pArray[left_index] < pivot)
         {
             left_index++;
         }
 
-        if (true == brightMode)
+        if (left_index == right_index)
         {
-            right_index--;
+            break;
         }
+        pArray[right_index] = pArray[left_index];
     }
 
     pArray[left_index] = pivot;
 
-    // 至此，array被分成两个子序列，以pivot为分界
-    quick_sort(pArray, left_index - 1);
-    quick_sort(pArray+left_index+1, len-left_index-1);
+    if (left_index - 1 - start_index >= 1)
+    {
+        quick_sort(pArray, start_index, left_index-1); // 左子序列排序
+    }
 
+    if (end_index - left_index - 1 >= 1)
+    {
+        quick_sort(pArray, left_index+1, end_index);   // 右子序列排序
+    }
+    
     return 0;
 }
 
 int main(void)
 {
-    int array[ARRAY_LEN] = {2, 1, 3, 5, 4, 9, 6, 8, 0, 6};
+    int array[ARRAY_LEN];
+    int len = sizeof(array) / sizeof(int);
 
-    traverse_array(array, ARRAY_LEN);
+    create_int_array(array, len);
+
     printf("排序前的数组: ");
+    traverse_array(array, len);
 
-    quick_sort(array, ARRAY_LEN);
+    quick_sort(array, 0, len - 1);
 
     printf("排序后的数组: ");
-    traverse_array(array, ARRAY_LEN);
+    traverse_array(array, len);
 
     return 0;
 }
